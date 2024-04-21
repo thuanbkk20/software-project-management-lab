@@ -5,12 +5,16 @@ using MyCompanyName.AbpZeroTemplate.Authorization.Delegation;
 using MyCompanyName.AbpZeroTemplate.Authorization.Roles;
 using MyCompanyName.AbpZeroTemplate.Authorization.Users;
 using MyCompanyName.AbpZeroTemplate.Chat;
+using MyCompanyName.AbpZeroTemplate.Classes;
 using MyCompanyName.AbpZeroTemplate.Editions;
 using MyCompanyName.AbpZeroTemplate.Friendships;
 using MyCompanyName.AbpZeroTemplate.MultiTenancy;
 using MyCompanyName.AbpZeroTemplate.MultiTenancy.Accounting;
 using MyCompanyName.AbpZeroTemplate.MultiTenancy.Payments;
 using MyCompanyName.AbpZeroTemplate.Storage;
+using MyCompanyName.AbpZeroTemplate.Students;
+using MyCompanyName.AbpZeroTemplate.Teachers;
+using System.Text.RegularExpressions;
 
 namespace MyCompanyName.AbpZeroTemplate.EntityFrameworkCore
 {
@@ -38,6 +42,20 @@ namespace MyCompanyName.AbpZeroTemplate.EntityFrameworkCore
         
         public virtual DbSet<RecentPassword> RecentPasswords { get; set; }
 
+        // CUSTOM DBSETS    
+        public virtual DbSet<Student> Students { get; set; }
+
+        public virtual DbSet<StudentUser> StudentUsers { get; set; }
+
+        public virtual DbSet<Teachers.Teacher> Teachers { get; set; }
+
+        public virtual DbSet<TeacherUser> TeacherUsers { get; set; }
+
+        public virtual DbSet<Classes.Class> Classes { get; set; }
+
+        public virtual DbSet<ClassStudent> ClassStudents { get; set; }
+
+        public virtual DbSet<Schedules.Schedule> Schedules { get; set; }
         public AbpZeroTemplateDbContext(DbContextOptions<AbpZeroTemplateDbContext> options)
             : base(options)
         {
