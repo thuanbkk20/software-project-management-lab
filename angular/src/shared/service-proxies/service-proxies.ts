@@ -1630,6 +1630,74 @@ export class ChatServiceProxy {
 }
 
 @Injectable()
+export class ClassServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @return Success
+     */
+    getClass(filter: string | undefined): Observable<ListResultDtoOfClassListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Class/GetClass?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClass(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClass(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfClassListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfClassListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClass(response: HttpResponseBase): Observable<ListResultDtoOfClassListDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListResultDtoOfClassListDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfClassListDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class CommonLookupServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -9503,6 +9571,139 @@ export class RoleServiceProxy {
 }
 
 @Injectable()
+export class ScheduleServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param classId (optional) 
+     * @param teacherId (optional) 
+     * @return Success
+     */
+    getSchedule(getByCurrentUser: boolean, classId: number | undefined, teacherId: number | undefined): Observable<ListResultDtoOfScheduleDto> {
+        let url_ = this.baseUrl + "/api/services/app/Schedule/GetSchedule?";
+        if (getByCurrentUser === undefined || getByCurrentUser === null)
+            throw new Error("The parameter 'getByCurrentUser' must be defined and cannot be null.");
+        else
+            url_ += "getByCurrentUser=" + encodeURIComponent("" + getByCurrentUser) + "&";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        if (teacherId === null)
+            throw new Error("The parameter 'teacherId' cannot be null.");
+        else if (teacherId !== undefined)
+            url_ += "TeacherId=" + encodeURIComponent("" + teacherId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSchedule(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSchedule(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfScheduleDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfScheduleDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetSchedule(response: HttpResponseBase): Observable<ListResultDtoOfScheduleDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListResultDtoOfScheduleDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfScheduleDto>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createSchedule(body: CreateScheduleInput | undefined): Observable<ScheduleDto> {
+        let url_ = this.baseUrl + "/api/services/app/Schedule/CreateSchedule";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateSchedule(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateSchedule(<any>response_);
+                } catch (e) {
+                    return <Observable<ScheduleDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ScheduleDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateSchedule(response: HttpResponseBase): Observable<ScheduleDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ScheduleDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ScheduleDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class SessionServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -15612,6 +15813,90 @@ export interface ICheckDatabaseOutput {
     isDatabaseExist: boolean;
 }
 
+export class ClassListDto implements IClassListDto {
+    name!: string | undefined;
+    academicYear!: string | undefined;
+
+    constructor(data?: IClassListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.academicYear = _data["academicYear"];
+        }
+    }
+
+    static fromJS(data: any): ClassListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["academicYear"] = this.academicYear;
+        return data; 
+    }
+}
+
+export interface IClassListDto {
+    name: string | undefined;
+    academicYear: string | undefined;
+}
+
+export class ClassRefDto implements IClassRefDto {
+    name!: string | undefined;
+    academicYear!: string | undefined;
+    id!: number;
+
+    constructor(data?: IClassRefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.academicYear = _data["academicYear"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ClassRefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassRefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["academicYear"] = this.academicYear;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IClassRefDto {
+    name: string | undefined;
+    academicYear: string | undefined;
+    id: number;
+}
+
 export class CleanValuesInput implements ICleanValuesInput {
     dynamicEntityPropertyId!: number;
     entityId!: string | undefined;
@@ -16125,6 +16410,54 @@ export interface ICreatePaymentDto {
     recurringPaymentEnabled: boolean;
     successUrl: string | undefined;
     errorUrl: string | undefined;
+}
+
+export class CreateScheduleInput implements ICreateScheduleInput {
+    startTime!: DateTime;
+    endTime!: DateTime;
+    classId!: number;
+    teacherId!: number;
+
+    constructor(data?: ICreateScheduleInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.startTime = _data["startTime"] ? DateTime.fromISO(_data["startTime"].toString()) : <any>undefined;
+            this.endTime = _data["endTime"] ? DateTime.fromISO(_data["endTime"].toString()) : <any>undefined;
+            this.classId = _data["classId"];
+            this.teacherId = _data["teacherId"];
+        }
+    }
+
+    static fromJS(data: any): CreateScheduleInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateScheduleInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toString() : <any>undefined;
+        data["classId"] = this.classId;
+        data["teacherId"] = this.teacherId;
+        return data; 
+    }
+}
+
+export interface ICreateScheduleInput {
+    startTime: DateTime;
+    endTime: DateTime;
+    classId: number;
+    teacherId: number;
 }
 
 export class CreateTenantInput implements ICreateTenantInput {
@@ -21576,6 +21909,50 @@ export interface IListResultDtoOfChatMessageDto {
     items: ChatMessageDto[] | undefined;
 }
 
+export class ListResultDtoOfClassListDto implements IListResultDtoOfClassListDto {
+    items!: ClassListDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfClassListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClassListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfClassListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfClassListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IListResultDtoOfClassListDto {
+    items: ClassListDto[] | undefined;
+}
+
 export class ListResultDtoOfDynamicEntityPropertyDto implements IListResultDtoOfDynamicEntityPropertyDto {
     items!: DynamicEntityPropertyDto[] | undefined;
 
@@ -22190,6 +22567,50 @@ export class ListResultDtoOfRoleListDto implements IListResultDtoOfRoleListDto {
 
 export interface IListResultDtoOfRoleListDto {
     items: RoleListDto[] | undefined;
+}
+
+export class ListResultDtoOfScheduleDto implements IListResultDtoOfScheduleDto {
+    items!: ScheduleDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfScheduleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ScheduleDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfScheduleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfScheduleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IListResultDtoOfScheduleDto {
+    items: ScheduleDto[] | undefined;
 }
 
 export class ListResultDtoOfSubscribableEditionComboboxItemDto implements IListResultDtoOfSubscribableEditionComboboxItemDto {
@@ -24733,6 +25154,54 @@ export interface ISavePageInput {
     pages: Page[] | undefined;
 }
 
+export class ScheduleDto implements IScheduleDto {
+    startTime!: DateTime;
+    endTime!: DateTime;
+    class!: ClassRefDto;
+    teacher!: TeacherRefDto;
+
+    constructor(data?: IScheduleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.startTime = _data["startTime"] ? DateTime.fromISO(_data["startTime"].toString()) : <any>undefined;
+            this.endTime = _data["endTime"] ? DateTime.fromISO(_data["endTime"].toString()) : <any>undefined;
+            this.class = _data["class"] ? ClassRefDto.fromJS(_data["class"]) : <any>undefined;
+            this.teacher = _data["teacher"] ? TeacherRefDto.fromJS(_data["teacher"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ScheduleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ScheduleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startTime"] = this.startTime ? this.startTime.toString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toString() : <any>undefined;
+        data["class"] = this.class ? this.class.toJSON() : <any>undefined;
+        data["teacher"] = this.teacher ? this.teacher.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IScheduleDto {
+    startTime: DateTime;
+    endTime: DateTime;
+    class: ClassRefDto;
+    teacher: TeacherRefDto;
+}
+
 export class SecuritySettingsEditDto implements ISecuritySettingsEditDto {
     allowOneConcurrentLoginPerUser!: boolean;
     useDefaultPasswordComplexitySettings!: boolean;
@@ -25647,6 +26116,50 @@ export class SwitchToLinkedAccountOutput implements ISwitchToLinkedAccountOutput
 export interface ISwitchToLinkedAccountOutput {
     switchAccountToken: string | undefined;
     tenancyName: string | undefined;
+}
+
+export class TeacherRefDto implements ITeacherRefDto {
+    name!: string | undefined;
+    phoneNumber!: string | undefined;
+    id!: number;
+
+    constructor(data?: ITeacherRefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): TeacherRefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TeacherRefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["phoneNumber"] = this.phoneNumber;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ITeacherRefDto {
+    name: string | undefined;
+    phoneNumber: string | undefined;
+    id: number;
 }
 
 export enum TenantAvailabilityState {
