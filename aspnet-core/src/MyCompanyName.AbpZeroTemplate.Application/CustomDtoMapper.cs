@@ -25,6 +25,7 @@ using MyCompanyName.AbpZeroTemplate.Authorization.Users.Importing.Dto;
 using MyCompanyName.AbpZeroTemplate.Authorization.Users.Profile.Dto;
 using MyCompanyName.AbpZeroTemplate.Chat;
 using MyCompanyName.AbpZeroTemplate.Chat.Dto;
+using MyCompanyName.AbpZeroTemplate.Classes.Dto;
 using MyCompanyName.AbpZeroTemplate.DynamicEntityProperties.Dto;
 using MyCompanyName.AbpZeroTemplate.Editions;
 using MyCompanyName.AbpZeroTemplate.Editions.Dto;
@@ -39,7 +40,11 @@ using MyCompanyName.AbpZeroTemplate.MultiTenancy.Payments;
 using MyCompanyName.AbpZeroTemplate.MultiTenancy.Payments.Dto;
 using MyCompanyName.AbpZeroTemplate.Notifications.Dto;
 using MyCompanyName.AbpZeroTemplate.Organizations.Dto;
+using MyCompanyName.AbpZeroTemplate.Schedules;
+using MyCompanyName.AbpZeroTemplate.Schedules.Dto;
 using MyCompanyName.AbpZeroTemplate.Sessions.Dto;
+using MyCompanyName.AbpZeroTemplate.Teachers;
+using MyCompanyName.AbpZeroTemplate.Teachers.Dto;
 using MyCompanyName.AbpZeroTemplate.WebHooks.Dto;
 
 namespace MyCompanyName.AbpZeroTemplate
@@ -76,7 +81,7 @@ namespace MyCompanyName.AbpZeroTemplate
             configuration.CreateMap<Role, RoleListDto>();
             configuration.CreateMap<UserRole, UserListRoleDto>();
 
-            
+
 
             //Edition
             configuration.CreateMap<EditionEditDto, SubscribableEdition>().ReverseMap();
@@ -159,11 +164,15 @@ namespace MyCompanyName.AbpZeroTemplate
             configuration.CreateMap<DynamicEntityPropertyDto, DynamicEntityProperty>();
 
             configuration.CreateMap<DynamicEntityPropertyValue, DynamicEntityPropertyValueDto>().ReverseMap();
-            
+
             //User Delegations
             configuration.CreateMap<CreateUserDelegationDto, UserDelegation>();
 
             /* ADD YOUR OWN CUSTOM AUTOMAPPER MAPPINGS HERE */
+            configuration.CreateMap<Classes.Class, ClassListDto>();
+            configuration.CreateMap<Classes.Class, ClassRefDto>();
+            configuration.CreateMap<Teacher, TeacherRefDto>();
+            configuration.CreateMap<Schedule, ScheduleDto>();
         }
     }
 }
