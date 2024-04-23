@@ -162,3 +162,17 @@ bs-days-calendar-view {
     display: inline-block;
     border-radius: 4px 0 0 4px;
 }
+
+.add-schedule-button {
+    background-color: #032B91; 
+    color: white;
+    border: none; 
+    border-radius: 5px;
+    padding: 10px 20px; 
+    cursor: pointer; 
+    outline: none; 
+    margin: 0px 0 30px 30px;
+    max-width: 200px;
+    width: 50%;
+    min-width: 130px;
+}

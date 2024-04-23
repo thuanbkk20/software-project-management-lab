@@ -96,6 +96,20 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
                         data: { permission: 'Pages.DemoUiComponents' },
                     },
                     {
+                        path: 'schedule',
+                        loadChildren: () =>
+                            import('./schedule/schedule.module').then(
+                                (m) => m.ScheduleModule
+                            ),
+                    },
+                    {
+                        path: 'add-schedule',
+                        loadChildren: () =>
+                            import('./add-schedule/add-schedule.module').then(
+                                (m) => m.AddScheduleModule
+                            ),
+                    },
+                    {
                         path: 'install',
                         loadChildren: () => import('./install/install.module').then((m) => m.InstallModule),
                     },

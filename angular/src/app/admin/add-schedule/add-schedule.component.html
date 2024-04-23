@@ -1,0 +1,45 @@
+<div [@routerTransition]>
+    <div class="content d-flex flex-column flex-column-fluid">
+        <div style="color: #032B91; font-size: 24px; padding: 0 30px 30px 30px">Thêm lịch giảng dạy</div>
+        <div [class]="containerClass">
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <!-- Form for adding a new schedule -->
+                    <form (ngSubmit)="addSchedule()">
+                        <div class="form-group mb-3"> <!-- Added mb-3 for bottom margin -->
+                            <label for="startTime">Thời gian bắt đầu:</label>
+                            <input type="datetime-local" id="startTime" name="startTime" [(ngModel)]="schedule.startTime" required>
+                        </div>
+                        <div class="form-group mb-3"> <!-- Added mb-3 for bottom margin -->
+                            <label for="endTime">Thời gian kết thúc:</label>
+                            <input type="datetime-local" id="endTime" name="endTime" [(ngModel)]="schedule.endTime" required>
+                        </div>
+                        <div class="form-group mb-3"> <!-- Added mb-3 for bottom margin -->
+                            <label for="classId">Lớp:</label>
+                            <select id="classId" name="classId" [(ngModel)]="schedule.classId" required>
+                                <option *ngIf="classes.length === 0" disabled>Loading classes...</option>
+                                <option *ngFor="let cls of classes" [value]="cls.id">{{ cls.name }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3"> <!-- Added mb-3 for bottom margin -->
+                            <label for="teacherId">Giáo viên:</label>
+                            <select id="teacherId" name="teacherId" [(ngModel)]="schedule.teacherId" required>
+                                <option *ngIf="teachers.length === 0" disabled>Loading teachers...</option>
+                                <option *ngFor="let teacher of teachers" [value]="teacher.id">{{ teacher.name }}</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm Lịch</button>
+                    </form>
+                    <!-- End of form for adding a new schedule -->
+                    
+                    <div class="row align-items-center">
+                        <div class="col primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                            <!-- Existing table code -->
+                            <!-- Make sure your table code remains intact here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
