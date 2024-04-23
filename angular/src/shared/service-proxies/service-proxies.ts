@@ -10155,6 +10155,74 @@ export class SubscriptionServiceProxy {
 }
 
 @Injectable()
+export class TeacherServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getTeacher(name: string | undefined): Observable<ListResultDtoOfTeacherDto> {
+        let url_ = this.baseUrl + "/api/services/app/Teacher/GetTeacher?";
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTeacher(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTeacher(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfTeacherDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfTeacherDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTeacher(response: HttpResponseBase): Observable<ListResultDtoOfTeacherDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListResultDtoOfTeacherDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfTeacherDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class TenantServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -22657,6 +22725,50 @@ export interface IListResultDtoOfSubscribableEditionComboboxItemDto {
     items: SubscribableEditionComboboxItemDto[] | undefined;
 }
 
+export class ListResultDtoOfTeacherDto implements IListResultDtoOfTeacherDto {
+    items!: TeacherDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfTeacherDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(TeacherDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfTeacherDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfTeacherDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IListResultDtoOfTeacherDto {
+    items: TeacherDto[] | undefined;
+}
+
 export class LocalizableComboboxItemDto implements ILocalizableComboboxItemDto {
     value!: string | undefined;
     displayText!: string | undefined;
@@ -26116,6 +26228,50 @@ export class SwitchToLinkedAccountOutput implements ISwitchToLinkedAccountOutput
 export interface ISwitchToLinkedAccountOutput {
     switchAccountToken: string | undefined;
     tenancyName: string | undefined;
+}
+
+export class TeacherDto implements ITeacherDto {
+    id!: number;
+    name!: string | undefined;
+    phoneNumber!: string | undefined;
+
+    constructor(data?: ITeacherDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): TeacherDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TeacherDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["phoneNumber"] = this.phoneNumber;
+        return data; 
+    }
+}
+
+export interface ITeacherDto {
+    id: number;
+    name: string | undefined;
+    phoneNumber: string | undefined;
 }
 
 export class TeacherRefDto implements ITeacherRefDto {

@@ -173,6 +173,7 @@ namespace MyCompanyName.AbpZeroTemplate
             configuration.CreateMap<Classes.Class, ClassRefDto>();
             configuration.CreateMap<Teacher, TeacherRefDto>();
             configuration.CreateMap<Schedule, ScheduleDto>();
+            configuration.CreateMap<Teacher, TeacherDto>();
         }
     }
 }
