@@ -15882,6 +15882,7 @@ export interface ICheckDatabaseOutput {
 }
 
 export class ClassListDto implements IClassListDto {
+    id!: number;
     name!: string | undefined;
     academicYear!: string | undefined;
 
@@ -15896,6 +15897,7 @@ export class ClassListDto implements IClassListDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.name = _data["name"];
             this.academicYear = _data["academicYear"];
         }
@@ -15910,6 +15912,7 @@ export class ClassListDto implements IClassListDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["name"] = this.name;
         data["academicYear"] = this.academicYear;
         return data; 
@@ -15917,6 +15920,7 @@ export class ClassListDto implements IClassListDto {
 }
 
 export interface IClassListDto {
+    id: number;
     name: string | undefined;
     academicYear: string | undefined;
 }

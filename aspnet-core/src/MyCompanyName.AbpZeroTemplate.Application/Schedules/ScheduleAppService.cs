@@ -43,19 +43,20 @@ namespace MyCompanyName.AbpZeroTemplate.Schedules
         {
             var query = _scheduleRepository.GetAll().Include(s => s.Teacher).Include(s => s.Class);
 
-            if(input.getByCurrentUser == true)
+            var userId = AbpSession.UserId.Value;
+            if(!(userId == 1 || userId == 2))
             {
-                var userId = AbpSession.UserId.Value;
-                Console.WriteLine(userId);
-                var teacherUser = _teacherUserReposioty.GetAll().Where(t => t.ID_user == userId).First();
-                Console.Write(teacherUser);
-                if(teacherUser == null)
+                if (input.getByCurrentUser == true)
                 {
-                    throw new Exception("User is not teacher");
+                    var teacherUser = _teacherUserReposioty.GetAll().Where(t => t.ID_user == userId).FirstOrDefault();
+                    if (teacherUser == null)
+                    {
+                        throw new Exception("User is not teacher");
+                    }
+                    query.Where(s => s.ID_teacher == teacherUser.ID_teacher);
                 }
-                query.Where(s => s.ID_teacher == teacherUser.ID_teacher);
             }
-            else if(input.TeacherId != null)
+            if(input.TeacherId != null)
             {
                 query.Where(s=> s.ID_teacher == input.TeacherId);
             }
