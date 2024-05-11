@@ -97,17 +97,16 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
                     },
                     {
                         path: 'schedule',
-                        loadChildren: () =>
-                            import('./schedule/schedule.module').then(
-                                (m) => m.ScheduleModule
-                            ),
+                        loadChildren: () => import('./schedule/schedule.module').then((m) => m.ScheduleModule),
+                    },
+                    {
+                        path: 'class/:classId',
+                        loadChildren: () => import('./class/class.module').then((m) => m.ClassModule),
                     },
                     {
                         path: 'add-schedule',
                         loadChildren: () =>
-                            import('./add-schedule/add-schedule.module').then(
-                                (m) => m.AddScheduleModule
-                            ),
+                            import('./add-schedule/add-schedule.module').then((m) => m.AddScheduleModule),
                     },
                     {
                         path: 'install',

@@ -9,5 +9,9 @@ namespace MyCompanyName.AbpZeroTemplate.Classes
     public interface IClassAppService
     {
         ListResultDto<ClassListDto> GetClass(GetClassInput input);
+
+        ClassListDto GetClassDetail(GetClassStudentInput input);
+
+        ListResultDto<ClassStudentDto> GetClassStudent(GetClassStudentInput input);
     }
 }

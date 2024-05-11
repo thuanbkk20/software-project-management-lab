@@ -1695,6 +1695,118 @@ export class ClassServiceProxy {
         }
         return _observableOf<ListResultDtoOfClassListDto>(<any>null);
     }
+
+    /**
+     * @param classId (optional) 
+     * @return Success
+     */
+    getClassDetail(classId: number | undefined): Observable<ClassListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Class/GetClassDetail?";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClassDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClassDetail(<any>response_);
+                } catch (e) {
+                    return <Observable<ClassListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ClassListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClassDetail(response: HttpResponseBase): Observable<ClassListDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClassListDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ClassListDto>(<any>null);
+    }
+
+    /**
+     * @param classId (optional) 
+     * @return Success
+     */
+    getClassStudent(classId: number | undefined): Observable<ListResultDtoOfClassStudentDto> {
+        let url_ = this.baseUrl + "/api/services/app/Class/GetClassStudent?";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClassStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClassStudent(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfClassStudentDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfClassStudentDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClassStudent(response: HttpResponseBase): Observable<ListResultDtoOfClassStudentDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListResultDtoOfClassStudentDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfClassStudentDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -15969,6 +16081,54 @@ export interface IClassRefDto {
     id: number;
 }
 
+export class ClassStudentDto implements IClassStudentDto {
+    name!: string | undefined;
+    academicYear!: string | undefined;
+    address!: string | undefined;
+    id!: number;
+
+    constructor(data?: IClassStudentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.academicYear = _data["academicYear"];
+            this.address = _data["address"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ClassStudentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClassStudentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["academicYear"] = this.academicYear;
+        data["address"] = this.address;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IClassStudentDto {
+    name: string | undefined;
+    academicYear: string | undefined;
+    address: string | undefined;
+    id: number;
+}
+
 export class CleanValuesInput implements ICleanValuesInput {
     dynamicEntityPropertyId!: number;
     entityId!: string | undefined;
@@ -22023,6 +22183,50 @@ export class ListResultDtoOfClassListDto implements IListResultDtoOfClassListDto
 
 export interface IListResultDtoOfClassListDto {
     items: ClassListDto[] | undefined;
+}
+
+export class ListResultDtoOfClassStudentDto implements IListResultDtoOfClassStudentDto {
+    items!: ClassStudentDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfClassStudentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClassStudentDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfClassStudentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfClassStudentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IListResultDtoOfClassStudentDto {
+    items: ClassStudentDto[] | undefined;
 }
 
 export class ListResultDtoOfDynamicEntityPropertyDto implements IListResultDtoOfDynamicEntityPropertyDto {

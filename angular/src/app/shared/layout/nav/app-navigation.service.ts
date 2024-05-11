@@ -93,12 +93,7 @@ export class AppNavigationService {
                         'flaticon-settings',
                         '/app/admin/tenantSettings'
                     ),
-                    new AppMenuItem(
-                        'AddSchedule',
-                        '',
-                        'flaticon-tabs',
-                        '/app/admin/add-schedule'
-                    ),
+                    new AppMenuItem('AddSchedule', '', 'flaticon-tabs', '/app/admin/add-schedule'),
                 ]
             ),
             new AppMenuItem(
@@ -107,12 +102,7 @@ export class AppNavigationService {
                 'flaticon-shapes',
                 '/app/admin/demo-ui-components'
             ),
-            new AppMenuItem(
-                'Schedule',
-                '',
-                'flaticon-tabs',
-                '/app/admin/schedule'
-            ),
+            new AppMenuItem('Schedule', '', 'flaticon-tabs', '/app/admin/schedule'),
         ]);
     }
 

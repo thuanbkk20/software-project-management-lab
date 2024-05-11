@@ -30,7 +30,7 @@
                               <ng-template pTemplate="body" let-record="$implicit" let-rowIndex="rowIndex">
                                   
                                       <tr>
-                                          <td>{{ record.class.name }}</td>
+                                        <td><a [routerLink]="['/app/admin/class', record.class.id]">{{ record.class.name }}</a></td>
                                           <td>{{ record.class.academicYear }}</td>
                                           <td>{{ record.startTime}}</td>
                                           <td>{{ record.endTime}}</td>

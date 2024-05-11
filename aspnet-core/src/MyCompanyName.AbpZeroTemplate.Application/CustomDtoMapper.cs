@@ -43,6 +43,7 @@ using MyCompanyName.AbpZeroTemplate.Organizations.Dto;
 using MyCompanyName.AbpZeroTemplate.Schedules;
 using MyCompanyName.AbpZeroTemplate.Schedules.Dto;
 using MyCompanyName.AbpZeroTemplate.Sessions.Dto;
+using MyCompanyName.AbpZeroTemplate.Students;
 using MyCompanyName.AbpZeroTemplate.Teachers;
 using MyCompanyName.AbpZeroTemplate.Teachers.Dto;
 using MyCompanyName.AbpZeroTemplate.WebHooks.Dto;
@@ -174,6 +175,7 @@ namespace MyCompanyName.AbpZeroTemplate
             configuration.CreateMap<Teacher, TeacherRefDto>();
             configuration.CreateMap<Schedule, ScheduleDto>();
             configuration.CreateMap<Teacher, TeacherDto>();
+            configuration.CreateMap<Student, ClassStudentDto>();
         }
     }
 }

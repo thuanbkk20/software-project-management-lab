@@ -20,6 +20,8 @@ namespace MyCompanyName.AbpZeroTemplate.Classes
         [Required]
         public int ID_class { get; set; }
 
+        public string LearningProgress { get; set; }
+
         [ForeignKey(nameof(ID_student))]
         public virtual Student Student { get; set; }
 

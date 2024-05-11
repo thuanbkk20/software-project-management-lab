@@ -17,6 +17,8 @@ namespace MyCompanyName.AbpZeroTemplate.Students
         [Required]
         public string AcademicYear { get; set; }
 
+        public string Address { get; set; }
+
         public virtual StudentUser StudentUser { get; set; }
 
         public virtual ICollection<ClassStudent> ClassStudents { get; set; }
